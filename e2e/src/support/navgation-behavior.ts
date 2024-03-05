@@ -15,3 +15,25 @@ export const navigateToPage = async (page: Page, pageId: PageId, globalConfig: G
 
   await page.goto(url.href);
 };
+
+export const currentPathMatchesPageId = (page: Page, pageId: PageId, globalConfig: GlobalConfig): boolean => {
+  const { pathname: currentPath } = new URL(page.url());
+  return pathMatchesPageId(currentPath, pageId, globalConfig);
+};
+
+const pathMatchesPageId = (path: string, pageId: PageId, { pagesConfig }: GlobalConfig): boolean => {
+  const pageRegexString = pagesConfig[pageId].regex;
+  const pageRegex = new RegExp(pageRegexString);
+  return pageRegex.test(path);
+};
+
+export const getCurrentPageId = (page: Page, globalConfig: GlobalConfig): PageId => {
+  const { pagesConfig } = globalConfig;
+  const pageIds = Object.keys(pagesConfig);
+  const { pathname: currentPath } = new URL(page.url());
+  const currentPageId = pageIds.find((pageId) => pathMatchesPageId(currentPath, pageId, globalConfig));
+  if (!currentPageId) {
+    throw new Error(`Failed to get page name from current route ${currentPath}, possible pages ${JSON.stringify(pagesConfig)}`);
+  }
+  return currentPageId;
+};

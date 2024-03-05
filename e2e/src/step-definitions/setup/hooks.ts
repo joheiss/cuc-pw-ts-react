@@ -3,19 +3,30 @@ import { ScenarioWorld } from "./world";
 import { getEnv } from "../../env/env";
 import { env, envNumber } from "../../env/parse-env";
 import { readFileSync } from "fs";
+import { BrowserContextOptions } from "playwright";
 
 BeforeAll(async () => {
   getEnv();
-  setDefaultTimeout(envNumber("SCRIPT_TIMEOUT"));
+  setDefaultTimeout(process.env.PWDEBUG ? -1 : envNumber("SCRIPT_TIMEOUT"));
+});
+
+Before({ tags: "@ignore" }, async function () {
+  return "skipped" as any;
+});
+
+Before({ tags: "@debug" }, async function (this: ScenarioWorld) {
+  this.debug = true;
 });
 
 Before(async function (this: ScenarioWorld, scenario: ITestCaseHookParameter) {
   console.log(`Running cucumber scenario: ${scenario.pickle.name}`);
 
-  const contextOptions = {
+  const contextOptions: BrowserContextOptions = {
+    acceptDownloads: true,
     recordVideo: {
       dir: `${env("VIDEOS_PATH")}`,
     },
+    viewport: { width: 1200, height: 800 },
   };
 
   const ready = await this.init(contextOptions);
@@ -23,27 +34,28 @@ Before(async function (this: ScenarioWorld, scenario: ITestCaseHookParameter) {
 });
 
 After(async function (this: ScenarioWorld, scenario: ITestCaseHookParameter) {
-  const { page, browser } = this.screen;
+  const { page, context, browser } = this;
   const status = scenario.result?.status;
 
   const videoPath = await page?.video()?.path();
 
   if (status === Status.FAILED) {
-    const screenshot = await page.screenshot({
+    const screenshot = await page!.screenshot({
       path: `${env("SCREENSHOTS_PATH")}/${scenario.pickle.name}.png`,
       type: "png",
     });
-    await page.close();
+    await page?.close();
 
     // attach screenshot AFTER closing the page
     this.attach(screenshot, "image/png");
   } else {
-    await page.close();
+    await page?.close();
   }
 
   // attach video AFTER closing the page
+  await context?.close();
   this.attach(readFileSync(videoPath!), "video/webm");
 
-  await browser.close();
+  await browser?.close();
   return browser;
 });

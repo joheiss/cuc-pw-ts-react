@@ -2,24 +2,16 @@ import { Then } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
 import { getElementLocator } from "../../support/web-element-helper";
 import { ElementKey } from "../setup/global";
-import { waitFor } from "../../support/wait-for-behavior";
+import { ScenarioWorld } from "../setup/world";
 
-Then(/^the "([^"]*)" should be displayed$/, async function (elementKey: ElementKey) {
-  console.log(`the ${elementKey} should be displayed`);
+Then(/^the "([^"]*)" should( not)? be displayed$/, async function (this: ScenarioWorld, elementKey: ElementKey, negate: boolean) {
+  console.log(`the ${elementKey} should ${negate ? "not" : ""} be displayed`);
 
-  const {
-    screen: { page },
-    globalVariables,
-    globalConfig,
-  } = this;
+  const { page, globalConfig } = this;
 
-  const elementIdentifier = getElementLocator(page, elementKey, globalVariables, globalConfig);
+  const elementIdentifier = getElementLocator(page!, elementKey, globalConfig);
 
-  await waitFor(async () => {
-    const isElementVisible = (await page.$(elementIdentifier)) != null;
-    return isElementVisible;
-  });
-
-  // const locator = page.locator(elementIdentifier);
-  // await expect(locator).toBeVisible();
+  const locator = page!.locator(elementIdentifier);
+  // !!negate ? await expect(locator).toBeHidden() : await expect(locator).toBeVisible();
+  await expect(locator).toBeVisible({ visible: !negate });
 });

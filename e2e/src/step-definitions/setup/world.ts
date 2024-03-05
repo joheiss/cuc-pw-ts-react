@@ -3,35 +3,40 @@ import { World, IWorldOptions, setWorldConstructor } from "@cucumber/cucumber";
 import { env } from "../../env/parse-env";
 import { GlobalConfig, GlobalVariables } from "./global";
 
-export type Screen = {
+type CustomWorldProperties = {
+  debug: boolean;
   browser: Browser;
   context: BrowserContext;
   page: Page;
+  globalConfig: GlobalConfig;
+  globalVariables: GlobalVariables;
 };
-
-export class ScenarioWorld extends World {
-  screen!: Screen;
+export class ScenarioWorld extends World<CustomWorldProperties> {
+  debug: boolean;
+  browser?: Browser;
+  context?: BrowserContext;
+  page?: Page;
   globalConfig: GlobalConfig;
   globalVariables: GlobalVariables;
 
   constructor(options: IWorldOptions) {
     super(options);
+    this.debug = false;
     this.globalConfig = options.parameters as GlobalConfig;
-    this.globalVariables = { currentScreen: "" };
+    this.globalVariables = {} as GlobalVariables;
   }
 
-  async init(contextOptions?: BrowserContextOptions): Promise<Screen> {
+  async init(contextOptions?: BrowserContextOptions): Promise<any> {
     // make sure all objects are closed at the beginning of a scenario
-    await this.screen?.page.close();
-    await this.screen?.context.close();
-    await this.screen?.browser.close();
+    await this.page?.close();
+    await this.context?.close();
+    await this.browser?.close();
 
-    const browser = await this.newBrowser();
-    const context = await browser.newContext(contextOptions);
-    const page = await context.newPage();
+    this.browser = await this.newBrowser();
+    this.context = await this.browser.newContext(contextOptions);
+    this.page = await this.context.newPage();
 
-    this.screen = { browser, context, page };
-    return this.screen;
+    return true;
   }
 
   private async newBrowser(): Promise<Browser> {
@@ -42,6 +47,7 @@ export class ScenarioWorld extends World {
     const browserType: BrowserType = playwright[automationBrowser];
     const browser = await browserType.launch({
       headless: process.env.HEADLESS !== "false",
+      devtools: process.env.DEVTOOLS !== "false",
       args: ["--disable-web-security", "--disable-features=IsolateOrigins, site-per-process"],
     });
     return browser;

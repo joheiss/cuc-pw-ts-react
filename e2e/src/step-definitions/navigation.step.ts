@@ -1,17 +1,23 @@
-import { Given } from "@cucumber/cucumber";
+import { Given, Then } from "@cucumber/cucumber";
+import { expect } from "@playwright/test";
 import { PageId } from "./setup/global";
-import { navigateToPage } from "../support/navgation-behavior";
+import { currentPathMatchesPageId, navigateToPage } from "../support/navgation-behavior";
+import { ScenarioWorld } from "./setup/world";
 
-Given(/I am on the "([^"]*)" page$/, async function (pageId: PageId) {
+Given(/I am on the "([^"]*)" page$/, async function (this: ScenarioWorld, pageId: PageId) {
   console.log(`I am on the ${pageId} page`);
 
-  const {
-    screen: { page },
-    globalVariables,
-    globalConfig,
-  } = this;
+  const { page, globalConfig } = this;
 
-  globalVariables.currentScreen = pageId;
+  await navigateToPage(page!, pageId, globalConfig);
 
-  await navigateToPage(page, pageId, globalConfig);
+  expect(currentPathMatchesPageId(page!, pageId, globalConfig)).toBeTruthy();
+});
+
+Then(/^I am directed to the "([^"]*)" page$/, async function (this: ScenarioWorld, pageId: PageId) {
+  console.log(`I am directed to the ${pageId} page`);
+
+  const { page, globalConfig } = this;
+
+  expect(currentPathMatchesPageId(page!, pageId, globalConfig)).toBeTruthy();
 });
