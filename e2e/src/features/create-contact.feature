@@ -67,3 +67,35 @@ Feature: Create contacts
     And the "address" should contain the text "911-8528 Mauris"
     And the "edit" should be displayed
     And the "delete" should be displayed
+
+  @smoke @regression
+  Scenario: Newly created contacts don't persist after a page refresh
+    Given I am on the "home" page
+    When I click the "create" button
+    Then I am directed to the "create contact" page
+    And the "create contact header" should contain the text "Create Contact"
+    And I fill in the "name" input field with "Hansi Hampelmann"
+    And I select the "Male" option from the "gender"
+    And I fill in the "phone" input field with "+49 777 9876543"
+    And I fill in the "street" input field with "Holzweg 1"
+    And I fill in the "city" input field with "Schwabach"
+    And I click the "save" button
+    # check the newly entered data
+    And I am directed to the "home" page
+    And I fill in the "search" input field with "Hampelmann"
+    And the "full name label" should contain the text "Name:"
+    And the "name" should be equal to the text "Hansi Hampelmann"
+    And the "name" should not be equal to the text "Hansi Hampel"
+    And the "gender label" should contain the text "Gender:"
+    And the "gender" should contain the text "Male"
+    And the "address label" should contain the text "Address:"
+    And the "address" should contain the text "Holzweg 1"
+    And the "edit" should be displayed
+    And the "delete" should be displayed
+    # --------------------
+    # now refresh the page
+    # --------------------
+    And I refresh the "home" page
+    And I am directed to the "home" page
+    And I fill in the "search" input field with "Hampelmann"
+    And the "contact" should not be displayed

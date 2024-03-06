@@ -9,12 +9,20 @@ export const clickElement = async (page: Page, elementIdentifier: ElementLocator
   await page.locator(elementIdentifier).click();
 };
 
-export const clickElementAndWait = async (page: Page, elementIdentifier: ElementLocator, waitMs: number): Promise<void> => {
+export const clickElementAndWait = async (
+  page: Page,
+  elementIdentifier: ElementLocator,
+  waitMs: number
+): Promise<void> => {
   await page.locator(elementIdentifier).click();
   await page.waitForTimeout(waitMs);
 };
 
-export const clickElementAtIndex = async (page: Page, elementIdentifier: ElementLocator, index: number): Promise<void> => {
+export const clickElementAtIndex = async (
+  page: Page,
+  elementIdentifier: ElementLocator,
+  index: number
+): Promise<void> => {
   await page.locator(elementIdentifier).nth(index).click();
 };
 
@@ -25,12 +33,18 @@ export const getIframe = async (page: Page, iframeIdentifier: ElementLocator): P
   return iframe;
 };
 
-export const getAttributeValue = async (page: Page, elementIdentifier: ElementLocator, attrName: string): Promise<String | null> => {
+export const getAttributeValue = async (
+  page: Page,
+  elementIdentifier: ElementLocator,
+  attrName: string
+): Promise<String | null> => {
+  // return page.locator(elementIdentifier).evaluate<string, HTMLInputElement>(element => element[attrName]);
   return page.locator(elementIdentifier).getAttribute(attrName);
 };
 
 export const getValue = async (page: Page, elementIdentifier: ElementLocator): Promise<String | null> => {
-  return getAttributeValue(page, elementIdentifier, "value");
+  return page.locator(elementIdentifier).evaluate<string, HTMLInputElement>((element) => element.value);
+  // return getAttributeValue(page, elementIdentifier, "value");
 };
 
 export const hoverElement = async (page: Page, elementIdentifier: ElementLocator, waitMs?: number): Promise<void> => {
@@ -42,7 +56,11 @@ export const inputValue = async (page: Page, elementIdentifier: ElementLocator, 
   await page.locator(elementIdentifier).fill(inputValue);
 };
 
-export const inputValueOnIframe = async (iframe: Frame, elementIdentifier: ElementLocator, inputValue: string): Promise<void> => {
+export const inputValueOnIframe = async (
+  iframe: Frame,
+  elementIdentifier: ElementLocator,
+  inputValue: string
+): Promise<void> => {
   // await iframe.locator(elementIdentifier).focus();
   await iframe.locator(elementIdentifier).fill(inputValue);
 };
@@ -62,7 +80,11 @@ export const isDisabled = async (page: Page, elementIdentifier: ElementLocator):
   return page.locator(elementIdentifier).isDisabled();
 };
 
-export const selectOption = async (page: Page, elementIdentifier: ElementLocator, optionValue: string): Promise<void> => {
+export const selectOption = async (
+  page: Page,
+  elementIdentifier: ElementLocator,
+  optionValue: string
+): Promise<void> => {
   await page.locator(elementIdentifier).focus();
   await page.locator(elementIdentifier).selectOption(optionValue);
 };

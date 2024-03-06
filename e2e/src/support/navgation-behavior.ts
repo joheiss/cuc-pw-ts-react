@@ -37,3 +37,7 @@ export const getCurrentPageId = (page: Page, globalConfig: GlobalConfig): PageId
   }
   return currentPageId;
 };
+
+export const reloadPage = async(page: Page): Promise<void> => {
+  await page.reload();
+}

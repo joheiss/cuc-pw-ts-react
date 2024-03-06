@@ -1,7 +1,7 @@
-import { Given, Then } from "@cucumber/cucumber";
+import { Given, Then, When } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
 import { PageId } from "./setup/global";
-import { currentPathMatchesPageId, navigateToPage } from "../support/navgation-behavior";
+import { currentPathMatchesPageId, navigateToPage, reloadPage } from "../support/navgation-behavior";
 import { ScenarioWorld } from "./setup/world";
 
 Given(/I am on the "([^"]*)" page$/, async function (this: ScenarioWorld, pageId: PageId) {
@@ -18,6 +18,16 @@ Then(/^I am directed to the "([^"]*)" page$/, async function (this: ScenarioWorl
   console.log(`I am directed to the ${pageId} page`);
 
   const { page, globalConfig } = this;
+
+  expect(currentPathMatchesPageId(page!, pageId, globalConfig)).toBeTruthy();
+});
+
+When(/^I refresh the "([^"]*)" page$/, async function (this: ScenarioWorld, pageId: PageId) {
+  console.log(`I refresh the ${pageId} page`);
+
+  const { page, globalConfig } = this;
+
+  await reloadPage(page!);
 
   expect(currentPathMatchesPageId(page!, pageId, globalConfig)).toBeTruthy();
 });

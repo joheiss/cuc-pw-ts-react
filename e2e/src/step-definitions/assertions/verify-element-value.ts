@@ -8,7 +8,7 @@ import { getAttributeValue, getValue, isDisabled } from "../../support/html-beha
 Then(
   /^the "([^"]*)" should( not)? contain the text "(.*)"$/,
   async function (this: ScenarioWorld, elementKey: ElementKey, negate: boolean, expectedElementText: string) {
-    console.log(`the ${elementKey} should ${negate ? "not" : ""} contain the text ${expectedElementText}`);
+    console.log(`the ${elementKey} should ${negate ? "not " : ""}contain the text ${expectedElementText}`);
 
     const { page, globalConfig } = this;
 
@@ -23,7 +23,7 @@ Then(
   /^the "([^"]*)" should( not)? be equal to the text "(.*)"$/,
   // { timeout: -1 },
   async function (this: ScenarioWorld, elementKey: ElementKey, negate: boolean, expectedElementText: string) {
-    console.log(`the ${elementKey} should ${negate ? "not" : ""} be equal to the text ${expectedElementText}`);
+    console.log(`the ${elementKey} should ${negate ? "not " : ""}be equal to the text ${expectedElementText}`);
 
     const { page, globalConfig } = this;
 
@@ -64,21 +64,32 @@ Then(
   }
 );
 
-Then(/^the "([^"]*)" should( not)? be disabled$/, async function (this: ScenarioWorld, elementKey: ElementKey, negate: boolean) {
-  console.log(`the ${elementKey} should ${negate ? "not " : ""}be disabled`);
+Then(
+  /^the "([^"]*)" should( not)? be disabled$/,
+  async function (this: ScenarioWorld, elementKey: ElementKey, negate: boolean) {
+    console.log(`the ${elementKey} should ${negate ? "not " : ""}be disabled`);
 
-  const { page, globalConfig } = this;
+    const { page, globalConfig } = this;
 
-  const elementIdentifier = getElementLocator(page!, elementKey, globalConfig);
+    const elementIdentifier = getElementLocator(page!, elementKey, globalConfig);
 
-  const content = await isDisabled(page!, elementIdentifier);
-  expect(content === !negate).toBeTruthy();
-});
+    const content = await isDisabled(page!, elementIdentifier);
+    expect(content === !negate).toBeTruthy();
+  }
+);
 
 Then(
   /^the "([0-9]+th|[0-9]+st|[0-9]+nd|[0-9]+rd)" "([^"]*)" should( not)? contain the text "(.*)"$/,
-  async function (this: ScenarioWorld, elementPosition: string, elementKey: ElementKey, negate: boolean, expectedElementText: string) {
-    console.log(`the ${elementPosition} ${elementKey} should ${negate ? "not" : ""} contain the text ${expectedElementText}`);
+  async function (
+    this: ScenarioWorld,
+    elementPosition: string,
+    elementKey: ElementKey,
+    negate: boolean,
+    expectedElementText: string
+  ) {
+    console.log(
+      `the ${elementPosition} ${elementKey} should ${negate ? "not" : ""} contain the text ${expectedElementText}`
+    );
 
     const { page, globalConfig } = this;
 
@@ -92,8 +103,16 @@ Then(
 
 Then(
   /^the "([^"]*)" "([^"]*)" attribute should( not)? contain the text "(.*)"$/,
-  async function (this: ScenarioWorld, elementKey: ElementKey, attribute: string, negate: boolean, expectedElementText: string) {
-    console.log(`the ${elementKey} ${attribute} attribute should ${negate ? "not " : ""}contain the text ${expectedElementText}`);
+  async function (
+    this: ScenarioWorld,
+    elementKey: ElementKey,
+    attribute: string,
+    negate: boolean,
+    expectedElementText: string
+  ) {
+    console.log(
+      `the ${elementKey} ${attribute} attribute should ${negate ? "not " : ""}contain the text ${expectedElementText}`
+    );
 
     const { page, globalConfig } = this;
 

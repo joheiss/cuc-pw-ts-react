@@ -2,7 +2,6 @@ import { Then } from "@cucumber/cucumber";
 import { expect } from "@playwright/test";
 import { getElementLocator } from "../../support/web-element-helper";
 import { ElementKey } from "../setup/global";
-import { waitFor } from "../../support/wait-for-behavior";
 import { ScenarioWorld } from "../setup/world";
 
 Then(
