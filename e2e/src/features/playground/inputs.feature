@@ -13,6 +13,18 @@ Feature: As a user I can interact with auto-complete inputs
     And the "movies" should not contain the value "The Godfather: Part II"
 
   @smoke @regression
+  Scenario Outline: Interactions and assertions on auto-complete inputs
+    When I fill in the "movies" input field with "<search>"
+    And I click the "<movie button>" button
+    Then the "movies" should contain the value "<movie>"
+    And the "movies" should not contain the value "The Godfather: Part II"
+
+    Examples: 
+      | search | movie button | movie           |
+      | The G  | godfather    | The Godfather   |
+      | The D  | dark knight  | The Dark Knight |
+
+  @smoke @regression
   Scenario: Interactions and assertions on input fields
     Then the "required" should equal the value "Testing"
     And the "required" should not equal the value "Testi"

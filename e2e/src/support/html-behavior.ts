@@ -57,12 +57,14 @@ export const inputValue = async (page: Page, elementIdentifier: ElementLocator, 
 };
 
 export const inputValueOnIframe = async (
-  iframe: Frame,
+  page: Page,
+  iframeIdentifier: string,
   elementIdentifier: ElementLocator,
   inputValue: string
 ): Promise<void> => {
   // await iframe.locator(elementIdentifier).focus();
-  await iframe.locator(elementIdentifier).fill(inputValue);
+  await page.frameLocator(iframeIdentifier).locator(elementIdentifier).fill(inputValue);
+  // await iframe.locator(elementIdentifier).fill(inputValue);
 };
 
 export const inputValueOnPage = async (
@@ -78,6 +80,10 @@ export const inputValueOnPage = async (
 
 export const isDisabled = async (page: Page, elementIdentifier: ElementLocator): Promise<boolean> => {
   return page.locator(elementIdentifier).isDisabled();
+};
+
+export const scrollIntoView = async (page: Page, elementIdentifier: ElementLocator): Promise<void> => {
+  await page.locator(elementIdentifier).scrollIntoViewIfNeeded();
 };
 
 export const selectOption = async (

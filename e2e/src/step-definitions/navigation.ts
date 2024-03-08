@@ -3,9 +3,10 @@ import { expect } from "@playwright/test";
 import { PageId } from "./setup/global";
 import { currentPathMatchesPageId, navigateToPage, reloadPage } from "../support/navgation-behavior";
 import { ScenarioWorld } from "./setup/world";
+import { logger } from "../logger";
 
 Given(/I am on the "([^"]*)" page$/, async function (this: ScenarioWorld, pageId: PageId) {
-  console.log(`I am on the ${pageId} page`);
+  logger.log(`I am on the ${pageId} page`);
 
   const { page, globalConfig } = this;
 
@@ -15,7 +16,7 @@ Given(/I am on the "([^"]*)" page$/, async function (this: ScenarioWorld, pageId
 });
 
 Then(/^I am directed to the "([^"]*)" page$/, async function (this: ScenarioWorld, pageId: PageId) {
-  console.log(`I am directed to the ${pageId} page`);
+  logger.log(`I am directed to the ${pageId} page`);
 
   const { page, globalConfig } = this;
 
@@ -23,7 +24,7 @@ Then(/^I am directed to the "([^"]*)" page$/, async function (this: ScenarioWorl
 });
 
 When(/^I refresh the "([^"]*)" page$/, async function (this: ScenarioWorld, pageId: PageId) {
-  console.log(`I refresh the ${pageId} page`);
+  logger.log(`I refresh the ${pageId} page`);
 
   const { page, globalConfig } = this;
 

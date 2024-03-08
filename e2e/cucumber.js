@@ -1,4 +1,9 @@
-require("dotenv").config({
+const dotenv = require("dotenv");
+dotenv.config({
+  override: true,
+  path: `./env/.env`,
+});
+dotenv.config({
   override: true,
   path: `./env/.env.${process.env.STAGE || "prod"}`,
 });

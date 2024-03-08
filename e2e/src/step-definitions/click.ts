@@ -3,16 +3,16 @@ import { ElementKey } from "./setup/global";
 import { ScenarioWorld } from "./setup/world";
 import { convertPosToIndex, getElementLocator } from "../support/web-element-helper";
 import { clickElement, clickElementAndWait, clickElementAtIndex } from "../support/html-behavior";
+import { logger } from "../logger";
 
 When(
   /^I click the "([^"]*)" (?:button|link|icon|element)$/,
   async function (this: ScenarioWorld, elementKey: ElementKey) {
-    console.log(`I click the ${elementKey} (button|link|icon|element)`);
+    logger.log(`I click the ${elementKey} (button|link|icon|element)`);
 
     const { page, globalConfig } = this;
 
     const elementIdentifier = getElementLocator(page!, elementKey, globalConfig);
-    console.log("click element: ", elementIdentifier);
     await clickElement(page!, elementIdentifier);
   }
 );
@@ -20,7 +20,7 @@ When(
 When(
   /I click the "([^"]*)" (?:button|link|icon|element) and wait briefly$/,
   async function (this: ScenarioWorld, elementKey: ElementKey) {
-    console.log(`I click the ${elementKey} (button|link|icon|element)`);
+    logger.log(`I click the ${elementKey} (button|link|icon|element)`);
 
     const { page, globalConfig } = this;
 
@@ -32,7 +32,7 @@ When(
 When(
   /I click the "([0-9]+th|[0-9]+st|[0-9]+nd|[0-9]+rd)" "([^"]*)" (?:button|link|icon|element)$/,
   async function (this: ScenarioWorld, elementPosition: string, elementKey: ElementKey) {
-    console.log(`I click the ${elementPosition} ${elementKey} (button|link|icon|element)`);
+    logger.log(`I click the ${elementPosition} ${elementKey} (button|link|icon|element)`);
 
     const { page, globalConfig } = this;
 

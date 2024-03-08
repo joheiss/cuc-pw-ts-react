@@ -1,4 +1,4 @@
-set tag=%1
-export COMMON_CONFIG_FILE="env/.env.prod"
-set COMMON_CONFIG_FILE=env/.env.prod
-npm run test --profile %tag% ||  npm run posttest
+set env=%1
+set tag=%2
+
+npm run test:%env% -- --tags %tag% ||  npm run posttest:%env%

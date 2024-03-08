@@ -6,8 +6,9 @@ Feature: As a user I can interact with new browser tabs
   @smoke @regression
   Scenario: Interactions and assertions on new browser tabs
     # When I click the "new tab" button and wait briefly
-    When I click the "new tab" button and wait briefly
-    And I wait for "100" milliseconds
+    When I click the "new tab" button
+    And I wait for "1200" milliseconds
+    # And I wait for the page to be loaded
     Then the "2nd" tab should contain the title "Contacts"
     And the "1st" tab should contain the title "Playground"
     And I fill in the "search" input field on the "2nd" tab with "Abraham"

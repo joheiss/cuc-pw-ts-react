@@ -1,6 +1,8 @@
 module.exports = {
   hostsConfig: {
     localhost: "http://localhost:3000",
+    production: "https://hub.testingtalks.com.au",
+    staging: "https://hub.testingtalks.com.au",
   },
   pagesConfig: {
     home: {
@@ -51,6 +53,7 @@ module.exports = {
       male: "[data-id='male-radio-button']",
       movies: "#movies-input",
       godfather: "li:text-is('The Godfather')",
+      "dark knight": "li:text-is('The Dark Knight')",
       required: "#outlined-required",
       disabled: "#outlined-disabled",
       "validated label": "#outlined-error-helper-text-label",
@@ -93,10 +96,14 @@ module.exports = {
       avatar: "[data-id='avatar']",
       "small avatar": "[data-id='small-avatar']",
       "dropdown button": "[data-id='drop-down-button']",
-      "profile": "[data-id='drop-down-profile']",
+      profile: "[data-id='drop-down-profile']",
       "my-account": "[data-id='drop-down-my-account']",
-      "logout": "[data-id='drop-down-logout']",
+      logout: "[data-id='drop-down-logout']",
       "select box": "#uncontrolled-native",
+      "login email": "[data-id='email']",
+      "login password": "[data-id='password']",
+      "login button": "[data-id='login-button']",
+      "email error": "[data-id='email-error']",
     },
   },
 };

@@ -3,7 +3,7 @@ Feature: As a user I can interact with checkboxes
   Background: 
     Given I am on the "playground" page
 
-  @smoke @regression
+  @dev @smoke @regression
   Scenario: Interactions and assertions on checkboxes
     Given the "blue" checkbox should not be checked
     And the "purple" checkbox should not be checked

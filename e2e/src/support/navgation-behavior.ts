@@ -13,7 +13,7 @@ export const navigateToPage = async (page: Page, pageId: PageId, globalConfig: G
   const pagesConfigItem = pagesConfig[pageId];
   url.pathname = pagesConfigItem.route;
 
-  await page.goto(url.href);
+  await page.goto(url.href, { waitUntil: "domcontentloaded" });
 };
 
 export const currentPathMatchesPageId = (page: Page, pageId: PageId, globalConfig: GlobalConfig): boolean => {
@@ -33,11 +33,13 @@ export const getCurrentPageId = (page: Page, globalConfig: GlobalConfig): PageId
   const { pathname: currentPath } = new URL(page.url());
   const currentPageId = pageIds.find((pageId) => pathMatchesPageId(currentPath, pageId, globalConfig));
   if (!currentPageId) {
-    throw new Error(`Failed to get page name from current route ${currentPath}, possible pages ${JSON.stringify(pagesConfig)}`);
+    throw new Error(
+      `Failed to get page name from current route ${currentPath}, possible pages ${JSON.stringify(pagesConfig)}`
+    );
   }
   return currentPageId;
 };
 
-export const reloadPage = async(page: Page): Promise<void> => {
+export const reloadPage = async (page: Page): Promise<void> => {
   await page.reload();
-}
+};

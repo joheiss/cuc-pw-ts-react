@@ -9,4 +9,4 @@ Feature: As a user I can interact with test areas
     When I click the "textarea" element
     And the "textarea" should contain the text "Testing Talks Hub has been established"
     And I fill in the "textarea" input field with "Let's type something in here ..."
-    # Then the "textarea" should contain the value "Let's type something in here ..."
+    Then the "textarea" should contain the value "Let's type something in here ..."

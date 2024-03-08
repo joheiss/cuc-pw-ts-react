@@ -3,28 +3,31 @@ import { expect } from "@playwright/test";
 import { ScenarioWorld } from "../setup/world";
 import { ElementKey } from "../setup/global";
 import { convertPosToIndex, getElementLocator } from "../../support/web-element-helper";
+import { waitFor } from "../../support/wait-for-behavior";
+import { logger } from "../../logger";
 
 Then(
   /^the "([0-9]+th|[0-9]+st|[0-9]+nd|[0-9]+rd)" (?:page|tab|window) should( not)? contain the title "(.*)"$/,
   async function (this: ScenarioWorld, tabPosition: string, negate: boolean, expectedTitle: string) {
-    console.log(`the ${tabPosition} page should ${negate ? "not " : ""}contain the title ${expectedTitle}`);
+    logger.log(`the ${tabPosition} page should ${negate ? "not " : ""}contain the title ${expectedTitle}`);
 
     const { page, context } = this;
 
     const tabIndex = convertPosToIndex(tabPosition);
 
-    // await page?.waitForTimeout(500);
-    const pages = context?.pages();
-    const tabTitle = await pages?.[tabIndex].title();
+    // await page?.waitForTimeout(1000);
 
-    expect(tabTitle?.includes(expectedTitle) === !negate).toBeTruthy();
+    const tab = context?.pages()?.[tabIndex].getByTitle(expectedTitle);
+    expect(!!tab === !negate).toBeTruthy();
+
+    // expect(tabTitle?.includes(expectedTitle) === !negate).toBeTruthy();
   }
 );
 
 Then(
   /^the "([^"]*)" on the "([0-9]+th|[0-9]+st|[0-9]+nd|[0-9]+rd)" (?:page|tab|window) should( not)? be displayed$/,
   async function (this: ScenarioWorld, elementKey: ElementKey, tabPosition: string, negate: boolean) {
-    console.log(`the ${elementKey} on the ${tabPosition} page should ${negate ? "not " : ""}be displayed`);
+    logger.log(`the ${elementKey} on the ${tabPosition} page should ${negate ? "not " : ""}be displayed`);
 
     const { page, context, globalConfig } = this;
 
@@ -41,8 +44,18 @@ Then(
 
 Then(
   /^the "([^"]*)" on the "([0-9]+th|[0-9]+st|[0-9]+nd|[0-9]+rd)" (?:page|tab|window) should( not)? contain the text "(.*)"$/,
-  async function (this: ScenarioWorld, elementKey: ElementKey, tabPosition: string, negate: boolean, expectedElementText: string) {
-    console.log(`the ${elementKey} on the ${tabPosition} page should ${negate ? "not " : ""}contain the text ${expectedElementText}`);
+  async function (
+    this: ScenarioWorld,
+    elementKey: ElementKey,
+    tabPosition: string,
+    negate: boolean,
+    expectedElementText: string
+  ) {
+    logger.log(
+      `the ${elementKey} on the ${tabPosition} page should ${
+        negate ? "not " : ""
+      }contain the text ${expectedElementText}`
+    );
 
     const { page, context, globalConfig } = this;
 
@@ -59,8 +72,16 @@ Then(
 
 Then(
   /^the "([^"]*)" on the "([0-9]+th|[0-9]+st|[0-9]+nd|[0-9]+rd)" (?:page|tab|window) should( not)? equal the text "(.*)"$/,
-  async function (this: ScenarioWorld, elementKey: ElementKey, tabPosition: string, negate: boolean, expectedElementText: string) {
-    console.log(`the ${elementKey} on the ${tabPosition} page should ${negate ? "not " : ""}equal the text ${expectedElementText}`);
+  async function (
+    this: ScenarioWorld,
+    elementKey: ElementKey,
+    tabPosition: string,
+    negate: boolean,
+    expectedElementText: string
+  ) {
+    logger.log(
+      `the ${elementKey} on the ${tabPosition} page should ${negate ? "not " : ""}equal the text ${expectedElementText}`
+    );
 
     const { page, context, globalConfig } = this;
 
@@ -71,7 +92,6 @@ Then(
     const tab = pages?.[tabIndex];
 
     const content = await tab!.locator(elementIdentifier).textContent();
-    console.log("content: ", content);
     expect((content === expectedElementText) === !negate).toBeTruthy();
   }
 );

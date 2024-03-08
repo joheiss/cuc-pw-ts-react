@@ -4,11 +4,12 @@ import { convertPosToIndex, getElementLocator } from "../../support/web-element-
 import { ElementKey } from "../setup/global";
 import { ScenarioWorld } from "../setup/world";
 import { getAttributeValue, getValue, isDisabled } from "../../support/html-behavior";
+import { logger } from "../../logger";
 
 Then(
   /^the "([^"]*)" should( not)? contain the text "(.*)"$/,
   async function (this: ScenarioWorld, elementKey: ElementKey, negate: boolean, expectedElementText: string) {
-    console.log(`the ${elementKey} should ${negate ? "not " : ""}contain the text ${expectedElementText}`);
+    logger.log(`the ${elementKey} should ${negate ? "not " : ""}contain the text ${expectedElementText}`);
 
     const { page, globalConfig } = this;
 
@@ -23,7 +24,7 @@ Then(
   /^the "([^"]*)" should( not)? be equal to the text "(.*)"$/,
   // { timeout: -1 },
   async function (this: ScenarioWorld, elementKey: ElementKey, negate: boolean, expectedElementText: string) {
-    console.log(`the ${elementKey} should ${negate ? "not " : ""}be equal to the text ${expectedElementText}`);
+    logger.log(`the ${elementKey} should ${negate ? "not " : ""}be equal to the text ${expectedElementText}`);
 
     const { page, globalConfig } = this;
 
@@ -39,7 +40,7 @@ Then(
 Then(
   /^the "([^"]*)" should( not)? contain the value "(.*)"$/,
   async function (this: ScenarioWorld, elementKey: ElementKey, negate: boolean, expectedElementText: string) {
-    console.log(`the ${elementKey} should ${negate ? "not " : ""}contain the value ${expectedElementText}`);
+    logger.log(`the ${elementKey} should ${negate ? "not " : ""}contain the value ${expectedElementText}`);
 
     const { page, globalConfig } = this;
 
@@ -53,7 +54,7 @@ Then(
 Then(
   /^the "([^"]*)" should( not)? equal the value "(.*)"$/,
   async function (this: ScenarioWorld, elementKey: ElementKey, negate: boolean, expectedElementText: string) {
-    console.log(`the ${elementKey} should ${negate ? "not " : ""}equal the value ${expectedElementText}`);
+    logger.log(`the ${elementKey} should ${negate ? "not " : ""}equal the value ${expectedElementText}`);
 
     const { page, globalConfig } = this;
 
@@ -67,7 +68,7 @@ Then(
 Then(
   /^the "([^"]*)" should( not)? be disabled$/,
   async function (this: ScenarioWorld, elementKey: ElementKey, negate: boolean) {
-    console.log(`the ${elementKey} should ${negate ? "not " : ""}be disabled`);
+    logger.log(`the ${elementKey} should ${negate ? "not " : ""}be disabled`);
 
     const { page, globalConfig } = this;
 
@@ -87,7 +88,7 @@ Then(
     negate: boolean,
     expectedElementText: string
   ) {
-    console.log(
+    logger.log(
       `the ${elementPosition} ${elementKey} should ${negate ? "not" : ""} contain the text ${expectedElementText}`
     );
 
@@ -110,7 +111,7 @@ Then(
     negate: boolean,
     expectedElementText: string
   ) {
-    console.log(
+    logger.log(
       `the ${elementKey} ${attribute} attribute should ${negate ? "not " : ""}contain the text ${expectedElementText}`
     );
 

@@ -4,6 +4,8 @@ import { getEnv } from "../../env/env";
 import { env, envNumber } from "../../env/parse-env";
 import { readFileSync } from "fs";
 import { BrowserContextOptions } from "playwright";
+import { getViewport } from "../../support/browser-behavior";
+import { logger } from "../../logger";
 
 BeforeAll(async () => {
   getEnv();
@@ -19,16 +21,16 @@ Before({ tags: "@debug" }, async function (this: ScenarioWorld) {
 });
 
 Before(async function (this: ScenarioWorld, scenario: ITestCaseHookParameter) {
-  console.log(`Running cucumber scenario: ${scenario.pickle.name}`);
+  logger.log(`Running cucumber scenario: ${scenario.pickle.name}`);
 
   const contextOptions: BrowserContextOptions = {
+    ignoreHTTPSErrors: true,
     acceptDownloads: true,
+    viewport: getViewport(),
     recordVideo: {
       dir: `${env("VIDEOS_PATH")}`,
     },
-    viewport: { width: 1200, height: 800 },
   };
-
   const ready = await this.init(contextOptions);
   return ready;
 });

@@ -3,11 +3,12 @@ import { DataTable, Then } from "@cucumber/cucumber";
 import { ScenarioWorld } from "../setup/world";
 import { ElementKey } from "../setup/global";
 import { getElementLocator } from "../../support/web-element-helper";
+import { logger } from "../../logger";
 
 Then(
   /^the "([^"]*)" table should( not)? equal the following:$/,
   async function (this: ScenarioWorld, elementKey: ElementKey, negate: boolean, dataTable: DataTable) {
-    console.log(`the ${elementKey} table should ${negate ? "not " : ""}equal the following:`);
+    logger.log(`the ${elementKey} table should ${negate ? "not " : ""}equal the following:`);
 
     const { page, globalConfig } = this;
 
