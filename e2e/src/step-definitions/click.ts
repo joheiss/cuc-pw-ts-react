@@ -2,7 +2,7 @@ import { When } from "@cucumber/cucumber";
 import { ElementKey } from "./setup/global";
 import { ScenarioWorld } from "./setup/world";
 import { convertPosToIndex, getElementLocator } from "../support/web-element-helper";
-import { clickElement, clickElementAndWait, clickElementAtIndex } from "../support/html-behavior";
+import { clickElement, clickElementAndWait, clickElementAndWaitForLoadState, clickElementAtIndex } from "../support/html-behavior";
 import { logger } from "../logger";
 
 When(
@@ -40,5 +40,17 @@ When(
 
     const elementIdentifier = getElementLocator(page!, elementKey, globalConfig);
     await clickElementAtIndex(page!, elementIdentifier, index);
+  }
+);
+
+When(
+  /I click the "([^"]*)" (?:button|link|icon|element) and wait until page is loaded$/,
+  async function (this: ScenarioWorld, elementKey: ElementKey) {
+    logger.log(`I click the ${elementKey} (button|link|icon|element)`);
+
+    const { page, globalConfig } = this;
+
+    const elementIdentifier = getElementLocator(page!, elementKey, globalConfig);
+    await clickElementAndWaitForLoadState(page!, elementIdentifier);
   }
 );

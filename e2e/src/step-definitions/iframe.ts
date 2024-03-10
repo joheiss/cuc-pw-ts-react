@@ -2,7 +2,7 @@ import { When } from "@cucumber/cucumber";
 import { ElementKey } from "./setup/global";
 import { ScenarioWorld } from "./setup/world";
 import { getElementLocator } from "../support/web-element-helper";
-import { getIframe, inputValueOnIframe } from "../support/html-behavior";
+import { inputValueOnIframe } from "../support/html-behavior";
 import { logger } from "../logger";
 
 When(
@@ -14,7 +14,6 @@ When(
 
     const elementIdentifier = getElementLocator(page!, elementKey, globalConfig);
     const iframeIdentifier = getElementLocator(page!, iframeName, globalConfig);
-    const iframe = await getIframe(page!, iframeIdentifier);
 
     await inputValueOnIframe(page!, iframeIdentifier, elementIdentifier, input);
     // await inputValueOnIframe(iframe!, elementIdentifier, input);

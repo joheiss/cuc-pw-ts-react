@@ -2,9 +2,10 @@ import { env } from "../env/parse-env";
 
 const DEBUG = "debug";
 const LOG = "log";
+const ERROR= "error";
 const OFF = "off";
 
-const LOG_LEVELS = [DEBUG, LOG, OFF];
+const LOG_LEVELS = [DEBUG, LOG, ERROR, OFF];
 export type LogLevel = (typeof LOG_LEVELS)[number];
 
 type LogFunction = (...msg: any[]) => void;
@@ -12,6 +13,7 @@ type LogFunction = (...msg: any[]) => void;
 type Logger = {
   debug: LogFunction;
   log: LogFunction;
+  error: LogFunction;
 };
 
 let loggerSingleton: Logger | null = null;

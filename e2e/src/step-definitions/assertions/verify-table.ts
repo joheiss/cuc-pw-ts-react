@@ -4,6 +4,8 @@ import { ScenarioWorld } from "../setup/world";
 import { ElementKey } from "../setup/global";
 import { getElementLocator } from "../../support/web-element-helper";
 import { logger } from "../../logger";
+import { getTableData } from "../../support/html-behavior";
+import { showErrorMessage } from "../../support/error-helper";
 
 Then(
   /^the "([^"]*)" table should( not)? equal the following:$/,
@@ -14,18 +16,16 @@ Then(
 
     const elementIdentifier = getElementLocator(page!, elementKey, globalConfig);
 
-    const data = await page?.locator(`${elementIdentifier} tbody tr`).evaluateAll((rows) => {
-      return rows.map((row) => {
-        const cells = row.querySelectorAll("th, td");
-        return Array.from(cells).map((cell) => cell.textContent);
-      });
-    });
-    // const data = await page?.$$eval(`${elementIdentifier} tbody tr`, (rows) => {
-    //   return rows.map((row) => {
-    //     const cells = row.querySelectorAll("td");
-    //     return Array.from(cells).map((cell) => cell.textContent);
-    //   });
-    // });
-    expect((JSON.stringify(data) === JSON.stringify(dataTable.raw())) === !negate).toBeTruthy();
+    const data = await getTableData(page!, elementIdentifier);
+
+    try {
+      expect((data === JSON.stringify(dataTable.raw())) === !negate).toBeTruthy();
+    } catch (error) {
+      showErrorMessage(
+        `🧨 Assertion failed: the content in table "${elementKey}" does ${
+          !negate ? "not " : ""
+        }equal the listed values 🧨`
+      );
+    }
   }
 );

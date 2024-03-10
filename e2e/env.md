@@ -8,6 +8,7 @@
 - UI_AUTOMATION_BROWSER="chromium"
 - HEADLESS=false
 - SCRIPT_TIMEOUT=60000
+- SELECTOR_TIMEOUT=2000 (default: 5000)
 - SCREENSHOTS_PATH="./test-results/screenshots/"
 - VIDEOS_PATH="./test-results/videos"
 - REPORT_PATH="./test-results/reports/"

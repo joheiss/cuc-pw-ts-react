@@ -5,8 +5,8 @@ Feature: As a user I can interact with new browser windows
 
   @smoke @regression
   Scenario: Interactions and assertions on new browser windows
-    When I click the "open window" button
-    And I wait for "1000" milliseconds
+    When I click the "open window" button and wait until page is loaded
+    # And I wait for "1000" milliseconds
     Then the "2nd" window should contain the title "Contacts"
     And the "1st" window should contain the title "Playground"
     And I fill in the "search" input field on the "2nd" window with "Abraham"

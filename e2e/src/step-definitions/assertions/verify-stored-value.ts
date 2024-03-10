@@ -4,6 +4,8 @@ import { getElementLocator } from "../../support/web-element-helper";
 import { ElementKey } from "../setup/global";
 import { ScenarioWorld } from "../setup/world";
 import { logger } from "../../logger";
+import { getElementText } from "../../support/html-behavior";
+import { showErrorMessage } from "../../support/error-helper";
 
 Then(
   /^the "([^"]*)" should( not)? equal the "([^"]*)" stored in global variables$/,
@@ -18,10 +20,18 @@ Then(
 
     const elementIdentifier = getElementLocator(page!, elementKey, globalConfig);
 
-    const content = await page!.locator(elementIdentifier).textContent();
+    const content = await getElementText(page!, elementIdentifier);
     const storedValue = globalVariables[variableKey];
 
-    expect((content === storedValue) === !negate);
+    try {
+      expect((content === storedValue) === !negate);
+    } catch (error) {
+      showErrorMessage(
+        `🧨 Assertion failed: the value in ${elementKey} does ${
+          !negate ? "not " : ""
+        }equal the global variable "${variableKey}" 🧨`
+      );
+    }
   }
 );
 
@@ -38,9 +48,17 @@ Then(
 
     const elementIdentifier = getElementLocator(page!, elementKey, globalConfig);
 
-    const content = await page!.locator(elementIdentifier).textContent();
+    const content = await getElementText(page!, elementIdentifier);
     const storedValue = globalVariables[variableKey];
 
-    expect(content?.includes(storedValue) === !negate);
+    try {
+      expect(content?.includes(storedValue) === !negate);
+    } catch (error) {
+      showErrorMessage(
+        `🧨 Assertion failed: the value in ${elementKey} does ${
+          !negate ? "not " : ""
+        }contain the value in global variable "${variableKey}" 🧨`
+      );
+    }
   }
 );

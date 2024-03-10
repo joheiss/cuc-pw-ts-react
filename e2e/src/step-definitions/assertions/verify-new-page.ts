@@ -3,8 +3,9 @@ import { expect } from "@playwright/test";
 import { ScenarioWorld } from "../setup/world";
 import { ElementKey } from "../setup/global";
 import { convertPosToIndex, getElementLocator } from "../../support/web-element-helper";
-import { waitFor } from "../../support/wait-for-behavior";
 import { logger } from "../../logger";
+import { getElementText } from "../../support/html-behavior";
+import { showErrorMessage } from "../../support/error-helper";
 
 Then(
   /^the "([0-9]+th|[0-9]+st|[0-9]+nd|[0-9]+rd)" (?:page|tab|window) should( not)? contain the title "(.*)"$/,
@@ -15,12 +16,22 @@ Then(
 
     const tabIndex = convertPosToIndex(tabPosition);
 
-    // await page?.waitForTimeout(1000);
+    const tab = context?.pages()?.[tabIndex];
+    const title = await tab?.title();
+    // const locator = tab?.getByTitle(expectedTitle);
+    // !negate
+    // ? await expect(locator!).toHaveText(expectedTitle)
+    // : await expect(locator!).not.toHaveText(expectedTitle);
+    logger.debug("title: ", title);
+    // expect(!!tab === !negate).toBeTruthy();
 
-    const tab = context?.pages()?.[tabIndex].getByTitle(expectedTitle);
-    expect(!!tab === !negate).toBeTruthy();
-
-    // expect(tabTitle?.includes(expectedTitle) === !negate).toBeTruthy();
+    try {
+      expect(title?.includes(expectedTitle) === !negate).toBeTruthy();
+    } catch (error) {
+      showErrorMessage(
+        `🧨 Assertion failed: ${tabPosition} page does ${!negate ? "not " : ""}contain the title ${expectedTitle}" 🧨`
+      );
+    }
   }
 );
 
@@ -38,7 +49,14 @@ Then(
     const tab = pages?.[tabIndex];
 
     const locator = tab!.locator(elementIdentifier);
-    await expect(locator).toBeVisible({ visible: !negate });
+
+    try {
+      await expect(locator).toBeVisible({ visible: !negate });
+    } catch (error) {
+      showErrorMessage(
+        `🧨 Assertion failed: the ${elementKey} on the ${tabPosition} page is ${!negate ? "not " : ""}displayed" 🧨`
+      );
+    }
   }
 );
 
@@ -65,8 +83,19 @@ Then(
     const pages = context?.pages();
     const tab = pages?.[tabIndex];
 
-    const content = await tab!.locator(elementIdentifier).textContent();
-    expect(content?.includes(expectedElementText) === !negate).toBeTruthy();
+    // const content = await tab!.locator(elementIdentifier).textContent();
+
+    const content = await getElementText(tab!, elementIdentifier);
+
+    try {
+      expect(content?.includes(expectedElementText) === !negate).toBeTruthy();
+    } catch (error) {
+      showErrorMessage(
+        `🧨 Assertion failed: the ${elementKey} on the ${tabPosition} page does ${
+          !negate ? "not " : ""
+        }contain the text ${expectedElementText}" 🧨`
+      );
+    }
   }
 );
 
@@ -91,7 +120,16 @@ Then(
     const pages = context?.pages();
     const tab = pages?.[tabIndex];
 
-    const content = await tab!.locator(elementIdentifier).textContent();
-    expect((content === expectedElementText) === !negate).toBeTruthy();
+    const content = await getElementText(tab!, elementIdentifier);
+
+    try {
+      expect((content === expectedElementText) === !negate).toBeTruthy();
+    } catch (error) {
+      showErrorMessage(
+        `🧨 Assertion failed: the ${elementKey} on the ${tabPosition} page does ${
+          !negate ? "not " : ""
+        }equal the text ${expectedElementText}" 🧨`
+      );
+    }
   }
 );

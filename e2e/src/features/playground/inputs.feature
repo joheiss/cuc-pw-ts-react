@@ -31,6 +31,7 @@ Feature: As a user I can interact with auto-complete inputs
     And the "required" should not be disabled
     And the "disabled" should be disabled
     And I fill in the "required" input field with "This should work"
+    And the "required" should contain the value "This should work"
 
   @smoke @regression
   Scenario: Interactions and assertions on input validations

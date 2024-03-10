@@ -4,6 +4,8 @@ import { convertPosToIndex, getElementLocator } from "../../support/web-element-
 import { ElementKey } from "../setup/global";
 import { ScenarioWorld } from "../setup/world";
 import { logger } from "../../logger";
+import { getElementCount } from "../../support/html-behavior";
+import { showErrorMessage } from "../../support/error-helper";
 
 Then(
   /^the "([^"]*)" should( not)? be displayed$/,
@@ -15,7 +17,12 @@ Then(
     const elementIdentifier = getElementLocator(page!, elementKey, globalConfig);
 
     const locator = page!.locator(elementIdentifier);
-    await expect(locator).toBeVisible({ visible: !negate });
+
+    try {
+      await expect(locator).toBeVisible({ visible: !negate });
+    } catch (error) {
+      showErrorMessage(`🧨 Assertion failed: ${elementKey} is ${!negate ? "not " : ""}displayed" 🧨`);
+    }
   }
 );
 
@@ -30,7 +37,14 @@ Then(
     const index = convertPosToIndex(elementPosition);
 
     const locator = page!.locator(elementIdentifier).nth(index);
-    await expect(locator).toBeVisible({ visible: !negate });
+
+    try {
+      await expect(locator).toBeVisible({ visible: !negate });
+    } catch (error) {
+      showErrorMessage(
+        `🧨 Assertion failed: the ${elementPosition} ${elementKey}is ${!negate ? "not " : ""}displayed" 🧨`
+      );
+    }
   }
 );
 
@@ -43,8 +57,16 @@ Then(
 
     const elementIdentifier = getElementLocator(page!, elementKey, globalConfig);
 
-    const locator = page!.locator(elementIdentifier);
-    const count = await locator.count();
-    expect((Number(elementCount) === count) === !negate);
+    const count = await getElementCount(page!, elementIdentifier);
+    
+    try {
+      expect((Number(elementCount) === count) === !negate).toBeTruthy();
+    } catch (error) {
+      showErrorMessage(
+        `🧨 Assertion failed: the number of displayed ${elementKey} elements is ${
+          !negate ? "not " : ""
+        }${elementCount}" 🧨`
+      );
+    }
   }
 );

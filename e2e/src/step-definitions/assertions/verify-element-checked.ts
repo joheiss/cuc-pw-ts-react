@@ -4,6 +4,7 @@ import { getElementLocator } from "../../support/web-element-helper";
 import { ElementKey } from "../setup/global";
 import { ScenarioWorld } from "../setup/world";
 import { logger } from "../../logger";
+import { showErrorMessage } from "../../support/error-helper";
 
 Then(
   /^the "([^"]*)" (?:checkbox|check box|radio button|switch) should( not)? be checked$/,
@@ -15,6 +16,10 @@ Then(
     const elementIdentifier = getElementLocator(page!, elementKey, globalConfig);
 
     const locator = page!.locator(elementIdentifier);
-    await expect(locator).toBeChecked({ checked: !negate });
+    try {
+      await expect(locator).toBeChecked({ checked: !negate });
+    } catch (error) {
+      showErrorMessage(`🧨 Assertion failed: ${elementKey} is ${!negate ? "not " : ""}checked 🧨`);
+    }
   }
 );

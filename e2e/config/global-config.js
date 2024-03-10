@@ -106,4 +106,14 @@ module.exports = {
       "email error": "[data-id='email-error']",
     },
   },
+  errorsConfig: [
+    {
+      originalErrMsgRegexString: "Wait time of [0-9]+ms for [a-zA-Z0-9]+exceeded",
+      parsedErrorMessage: "🧨 Timed out waiting for the '{}' <> 🧨",
+    },
+    {
+      originalErrMsgRegexString: "Cannot read properties of undefined (.*)",
+      parsedErrorMessage: "🧨 Unable to find the mapping for '{}' <> 🧨",
+    },
+  ],
 };

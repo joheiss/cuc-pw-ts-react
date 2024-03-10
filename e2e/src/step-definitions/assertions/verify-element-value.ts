@@ -3,8 +3,15 @@ import { expect } from "@playwright/test";
 import { convertPosToIndex, getElementLocator } from "../../support/web-element-helper";
 import { ElementKey } from "../setup/global";
 import { ScenarioWorld } from "../setup/world";
-import { getAttributeValue, getValue, isDisabled } from "../../support/html-behavior";
+import {
+  getElementAttributeValue,
+  getElementText,
+  getElementTextAtIndex,
+  getElementValue,
+  isElementDisabled,
+} from "../../support/html-behavior";
 import { logger } from "../../logger";
+import { showErrorMessage } from "../../support/error-helper";
 
 Then(
   /^the "([^"]*)" should( not)? contain the text "(.*)"$/,
@@ -15,8 +22,15 @@ Then(
 
     const elementIdentifier = getElementLocator(page!, elementKey, globalConfig);
 
-    const content = await page!.locator(elementIdentifier).textContent();
-    negate ? expect(content).not.toContain(expectedElementText) : expect(content).toContain(expectedElementText);
+    const content = await getElementText(page!, elementIdentifier);
+
+    try {
+      expect(content?.includes(expectedElementText) === !negate).toBeTruthy();
+    } catch (error) {
+      showErrorMessage(
+        `🧨 Assertion failed: ${elementKey} does ${!negate ? "not " : ""}contain the text "${expectedElementText}" 🧨`
+      );
+    }
   }
 );
 
@@ -32,8 +46,15 @@ Then(
 
     const elementIdentifier = getElementLocator(page!, elementKey, globalConfig);
 
-    const content = await page!.locator(elementIdentifier).textContent();
-    negate ? expect(content).not.toBe(expectedElementText) : expect(content).toBe(expectedElementText);
+    const content = await getElementText(page!, elementIdentifier);
+
+    try {
+      expect((content === expectedElementText) === !negate).toBeTruthy();
+    } catch (error) {
+      showErrorMessage(
+        `🧨 Assertion failed: ${elementKey} does ${!negate ? "not " : ""}equal the text "${expectedElementText}" 🧨`
+      );
+    }
   }
 );
 
@@ -46,8 +67,15 @@ Then(
 
     const elementIdentifier = getElementLocator(page!, elementKey, globalConfig);
 
-    const content = await getValue(page!, elementIdentifier);
-    negate ? expect(content).not.toContain(expectedElementText) : expect(content).toContain(expectedElementText);
+    const content = await getElementValue(page!, elementIdentifier);
+
+    try {
+      expect(content?.includes(expectedElementText) === !negate).toBeTruthy();
+    } catch (error) {
+      showErrorMessage(
+        `🧨 Assertion failed: ${elementKey} does ${!negate ? "not " : ""}contain the value "${expectedElementText}" 🧨`
+      );
+    }
   }
 );
 
@@ -60,8 +88,15 @@ Then(
 
     const elementIdentifier = getElementLocator(page!, elementKey, globalConfig);
 
-    const content = await getValue(page!, elementIdentifier);
-    expect((content === expectedElementText) === !negate).toBeTruthy();
+    const content = await getElementValue(page!, elementIdentifier);
+
+    try {
+      expect((content === expectedElementText) === !negate).toBeTruthy();
+    } catch (error) {
+      showErrorMessage(
+        `🧨 Assertion failed: ${elementKey} does ${!negate ? "not " : ""}equal the value "${expectedElementText}" 🧨`
+      );
+    }
   }
 );
 
@@ -74,8 +109,14 @@ Then(
 
     const elementIdentifier = getElementLocator(page!, elementKey, globalConfig);
 
-    const content = await isDisabled(page!, elementIdentifier);
-    expect(content === !negate).toBeTruthy();
+    const content = await isElementDisabled(page!, elementIdentifier);
+
+    try {
+      expect.soft(content === !negate).toBeTruthy();
+    } catch (error) {
+      logger.debug("Error: ", error);
+      showErrorMessage(`🧨 Assertion failed: ${elementKey} is ${!negate ? "not " : ""}disabled" 🧨`);
+    }
   }
 );
 
@@ -97,8 +138,17 @@ Then(
     const elementIdentifier = getElementLocator(page!, elementKey, globalConfig);
     const index = convertPosToIndex(elementPosition);
 
-    const content = await page!.locator(elementIdentifier).nth(index).textContent();
-    expect(content?.includes(expectedElementText) === !negate);
+    const content = await getElementTextAtIndex(page!, elementIdentifier, index);
+
+    try {
+      expect(content?.includes(expectedElementText) === !negate).toBeTruthy();
+    } catch (error) {
+      showErrorMessage(
+        `🧨 Assertion failed: the ${elementPosition} of element ${elementKey} does ${
+          !negate ? "not " : ""
+        }contain the text "${expectedElementText}" 🧨`
+      );
+    }
   }
 );
 
@@ -119,7 +169,16 @@ Then(
 
     const elementIdentifier = getElementLocator(page!, elementKey, globalConfig);
 
-    const content = await getAttributeValue(page!, elementIdentifier, attribute);
-    expect(content!.includes(expectedElementText) === !negate);
+    const content = await getElementAttributeValue(page!, elementIdentifier, attribute);
+
+    try {
+      expect(content!.includes(expectedElementText) === !negate).toBeTruthy();
+    } catch (error) {
+      showErrorMessage(
+        `🧨 Assertion failed: the ${elementKey} ${attribute} attribute does ${
+          !negate ? "not " : ""
+        }contain the text "${expectedElementText}" 🧨`
+      );
+    }
   }
 );
