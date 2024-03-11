@@ -3,7 +3,7 @@ import { wait } from "../support/html-behavior";
 import { ScenarioWorld } from "./setup/world";
 import { logger } from "../logger";
 
-When(/I wait for "([^"]*)" milliseconds$/, async function (this: ScenarioWorld, waitMs: string) {
+When(/I wait for "([^"]*)" milliseconds$/, { timeout: 60000 }, async function (this: ScenarioWorld, waitMs: string) {
   logger.log(`I wait for ${waitMs} milliseconds`);
 
   const { page } = this;

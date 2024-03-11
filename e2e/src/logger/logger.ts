@@ -1,4 +1,5 @@
 import { env } from "../env/parse-env";
+import { stringIsOfOptions } from "../support/options-helper";
 
 const DEBUG = "debug";
 const LOG = "log";
@@ -25,17 +26,6 @@ export const getLogger = (): Logger => {
     loggerSingleton = createLogger(validLogLevel);
   }
   return loggerSingleton!;
-};
-
-export const stringIsOfOptions = <T extends string>(logLevel: string, options: readonly string[]): T => {
-  if (logLevelIsT(logLevel, options)) {
-    return logLevel as T;
-  }
-  throw new Error(`🧨 Logger "${logLevel}" needs to be one of "${options}" 🧨`);
-};
-
-const logLevelIsT = <T extends string>(logLevel: string, options: readonly string[]): logLevel is T => {
-  return options.includes(logLevel);
 };
 
 const createLogger = (logLevel: LogLevel): Logger => {

@@ -13,6 +13,11 @@ module.exports = {
       route: "/tasks/create",
       regex: "^/tasks/create$",
     },
+    "edit contact": {
+      route: "/tasks/{id}/edit",
+      regex: "^/tasks/\\d+/edit$",
+    },
+
     playground: {
       route: "/playground",
       regex: "^/playground",
@@ -29,8 +34,11 @@ module.exports = {
       phone: "[data-id='phone']",
       street: "[data-id='street']",
       city: "[data-id='city']",
+      cancel: "[data-id='cancel-button']",
       save: "[data-id='save-button']",
+      "edit contact form": ":text('Edit Contact')",
       playground: "[data-id='playground-button']",
+      "error message": "[data-id='error-message']",
     },
     "create contact": {
       "create contact header": "h1.create-contact",
@@ -45,6 +53,7 @@ module.exports = {
       address: "[data-id='address']",
       edit: "[data-id='edit-button']",
       delete: "[data-id='delete-button']",
+      "no items message": "[data-id='no-items-message']",
     },
     playground: {
       "female label": "[data-id='female-radio-button']",

@@ -149,7 +149,7 @@ export const getElementTextOnIframe = async (
  * @param elementIdentifier
  * @returns
  */
-export const getElementValue = async (page: Page, elementIdentifier: ElementLocator): Promise<String | null> => {
+export const getElementValue = async (page: Page, elementIdentifier: ElementLocator): Promise<string | null> => {
   return page.locator(elementIdentifier).evaluate<string, HTMLInputElement>((element) => element.value);
 };
 

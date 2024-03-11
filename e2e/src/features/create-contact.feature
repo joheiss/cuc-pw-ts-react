@@ -68,7 +68,7 @@ Feature: Create contacts
     And the "edit" should be displayed
     And the "delete" should be displayed
 
-  @smoke @regression
+ @regression
   Scenario: Newly created contacts don't persist after a page refresh
     Given I am on the "home" page
     When I click the "create" button

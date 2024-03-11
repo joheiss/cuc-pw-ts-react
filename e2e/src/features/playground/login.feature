@@ -37,3 +37,9 @@ Feature: As a user I can interact with login forms
       | email           | password |
       | hansi           | secret   |
       | horsti.email.de | secret   |
+
+  @smoke @regression
+  Scenario: Login using a random email address
+    Given I fill in the "login email" input field with random "email"
+    And I fill in the "login password" input field with random "password"
+    And I wait for "10000" milliseconds
