@@ -3,6 +3,7 @@ module.exports = {
     localhost: "http://localhost:3000",
     production: "https://hub.testingtalks.com.au",
     staging: "https://hub.testingtalks.com.au",
+    "users api": "https://jsonplaceholder.typicode.com/",
   },
   pagesConfig: {
     home: {
@@ -17,7 +18,6 @@ module.exports = {
       route: "/tasks/{id}/edit",
       regex: "^/tasks/\\d+/edit$",
     },
-
     playground: {
       route: "/playground",
       regex: "^/playground",
@@ -113,6 +113,8 @@ module.exports = {
       "login password": "[data-id='password']",
       "login button": "[data-id='login-button']",
       "email error": "[data-id='email-error']",
+      "basic rest": ":text('Basic REST')",
+      "rest fullname": "[data-id='full-name']",
     },
   },
   errorsConfig: [
@@ -125,4 +127,11 @@ module.exports = {
       parsedErrorMessage: "🧨 Unable to find the mapping for '{}' <> 🧨",
     },
   ],
+  mocksConfig: {
+    users: "users",
+  },
+  mockPayloadMappings: {
+    "no users": [],
+    users: require("./mock-payloads/mock-users"),
+  },
 };

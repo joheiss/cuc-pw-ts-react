@@ -32,3 +32,9 @@ Example: `./run_tests.sh dev "@dev and not @production"`
 ### Production Server
 
 `https://hub.testingtalks.com.au`
+
+### Accessibility Rules
+
+Accessibility rules can be filtered using the following rule ids:
+
+`https://github.com/dequelabs/axe-core/blob/master/doc/rule-descriptions.md`

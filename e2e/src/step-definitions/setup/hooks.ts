@@ -32,6 +32,16 @@ Before(async function (this: ScenarioWorld, scenario: ITestCaseHookParameter) {
     },
   };
   const ready = await this.init(contextOptions);
+
+  // start Playwright tracing
+  await this.context?.tracing.start({
+    name: `${scenario.pickle.name}-${scenario.pickle.id}`,
+    title: scenario.pickle.name,
+    sources: true,
+    screenshots: true,
+    snapshots: true,
+  });
+
   return ready;
 });
 
@@ -42,16 +52,24 @@ After(async function (this: ScenarioWorld, scenario: ITestCaseHookParameter) {
   const videoPath = await page?.video()?.path();
 
   if (status === Status.FAILED) {
+    const tracePath = `${env("TRACES_PATH")}/${scenario.pickle.id}.zip`;
+
     const screenshot = await page!.screenshot({
       path: `${env("SCREENSHOTS_PATH")}/${scenario.pickle.name}.png`,
       type: "png",
     });
     await page?.close();
 
+    // only store Playwright traces in case of an error
+    await context?.tracing.stop({ path: tracePath });
+    const traceFileLink = `<a href="https://trace.playwright.dev/">Open ${tracePath}</a>`;
+    this.attach(`Trace file: ${traceFileLink}`, "text/html");
+
     // attach screenshot AFTER closing the page
     this.attach(screenshot, "image/png");
   } else {
     await page?.close();
+    await context?.tracing.stop();
   }
 
   // attach video AFTER closing the page
