@@ -18,7 +18,7 @@ jobs:
       - name: Install dependencies for e2e
         run: cd ./e2e && npm install
       - name: Install dependencies for ci
-        run: npm ci
+        run: npm ci --force
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run Cucumber tests
