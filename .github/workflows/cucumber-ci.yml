@@ -20,6 +20,8 @@ jobs:
         run: cd ./e2e && npm ci
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+      - name: Run react app on localhost
+        run: npm run start
       - name: Run Cucumber tests
         run: cd e2e && ./run_tests.sh dev "@regression and not @production"
         env:
