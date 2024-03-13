@@ -16,10 +16,10 @@ jobs:
           node-version: 20
       - name: Install dependencies for react
         run: npm ci --force
-      - name: Install dependencies for e2e
-        run: cd ./e2e && npm ci
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+      - name: Install dependencies for e2e
+        run: cd ./e2e && npm ci
       - name: Run Cucumber tests
         run: cd e2e && ./run_tests.sh dev "@regression and not @production"
         env:
