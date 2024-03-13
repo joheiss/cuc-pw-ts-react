@@ -14,15 +14,13 @@ jobs:
         with:
           node-version: 20
       - name: Install dependencies for react
-        run: npm install --force
-      - name: Install dependencies for e2e
-        run: cd ./e2e && npm install
-      - name: Install dependencies for ci
         run: npm ci --force
+      - name: Install dependencies for e2e
+        run: cd ./e2e && npm ci
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
       - name: Run Cucumber tests
-        run: ./e2e/run_tests.sh dev "@regression and not @production"
+        run: cd e2e && ./run_tests.sh dev "@regression and not @production"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
