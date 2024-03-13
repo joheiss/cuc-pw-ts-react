@@ -48,9 +48,11 @@ jobs:
           PWDEBUG: ${{ vars.PWDEBUG }}
           DEVTOOLS: ${{ vars.DEVTOOLS }}
           VAR_LOOKUP_TRIGGER: ${{ vars.VAR_LOOKUP_TRIGGER }}
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: Report
-          path: ${{ vars.TEST_RESULTS_PATH }}/**
+          path: ./e2e/${{ vars.TEST_RESULTS_PATH }}/**
           retention-days: 2
