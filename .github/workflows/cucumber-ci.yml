@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies for e2e
         run: cd ./e2e && npm ci
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+        run: npx playwright install
       - name: Run Cucumber tests
         run: cd e2e && ./run_tests.sh dev "@regression and not @production"
         env:
