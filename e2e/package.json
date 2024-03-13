@@ -38,7 +38,6 @@
     "cucumber-html-reporter": "^7.1.1",
     "dotenv": "^16.4.5",
     "multiple-cucumber-html-reporter": "^3.6.2",
-    "playwright": "^1.41.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }
