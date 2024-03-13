@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "cucumber": "cucumber-js src/features/**/*.feature --require-module ts-node/register --require src/step-definitions/**/**/*.ts",
-    "pretest": "rimraf test-results && mkdir test-results",
+    "pretest": "rimraf test-results && mkdir test-results && npx ts-node src/reporter/init-reports.ts",
     "test": "STAGE=dev cucumber-js",
     "test:dev": "STAGE=dev cucumber-js",
     "test:dev:rerun": "STAGE=dev cucumber-js -p rerun @rerun.txt",
