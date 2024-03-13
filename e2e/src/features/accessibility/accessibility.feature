@@ -10,7 +10,7 @@ Feature: Generate accessibility reports across our web site
     Given I am on the "create contact" page
     And I generate the AXE accessibility report
 
-  @dev @regression @a11y
+  @regression @a11y
   Scenario: Generate a11y report for the Edit Contact page
     Given I am on the "home" page
     When I click the "1st" "edit" button
